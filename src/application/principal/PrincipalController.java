@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import application.extractor_feature.AprendizagemBayesiana;
 import application.extractor_feature.AprendizagemMLP;
 import application.extractor_feature.ExtractAudioFeature;
-import application.extractor_feature.ExtractFeature;
+import application.extractor_feature.ExtractFeature;	
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,20 +24,10 @@ import javafx.stage.StageStyle;
 
 public class PrincipalController {
 
-	@FXML
-	private ImageView imageView;
-	@FXML private Label l3;
-	@FXML private Label lbPctNedFlanders;
-	@FXML private Label lbPctKrusty;
-	@FXML private Label lbCamisaNed;
-	@FXML private Label lbBarbaNed;
-	@FXML private Label lbCabeloKrusty;
-	@FXML private Label lbBocaKrusty;
-	@FXML private Label lbNarizKrusty;
-	@FXML private Label lbMatrizColisao;
+
 
 	private DecimalFormat df = new DecimalFormat("##0.0000");
-	private double[] caracteristicasImgSel = {0,0,0,0,0};
+	private double[] caracteristicasSomSel = {0,0,0,0,0};
 
 	//	@FXML
 	//	public void classificar() {
@@ -50,7 +40,8 @@ public class PrincipalController {
 	@FXML
 	public void classificar() {
 		//********Naive Bayes
-//		double[] nb = AprendizagemMLP.multilayer(caracteristicasSomSel);
+		//double[] nb = AprendizagemMLP.multilayer(caracteristicasSomSel);
+		double[] nb = AprendizagemMLP.multilayerPerceptron(caracteristicasSomSel);
 		//		lbPctNedFlanders.setText("NED FLANDERS: "+df.format(nb[0]*100) + "%");
 		//		lbPctKrusty.setText("KRUSTY: "+df.format(nb[1]*100) + "%");
 	}
