@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opencv-4.2.0"/>
+	<classpathentry kind="lib" path="lib/weka.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Gustavo/eclipse/Workspace/ProjetoAprendizadoDeMaquina/lib/jAudio-1.0.4.jar" sourcepath="lib/jAudio-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Gustavo/eclipse/Workspace/ProjetoAprendizadoDeMaquina/lib/jlibrosa-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
