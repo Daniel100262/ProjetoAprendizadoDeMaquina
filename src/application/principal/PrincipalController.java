@@ -3,13 +3,9 @@ package application.principal;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-
 import javax.sound.sampled.UnsupportedAudioFileException;
-
 import com.jlibrosa.audio.exception.FileFormatNotSupportedException;
 import com.jlibrosa.audio.wavFile.WavFileException;
-
-import application.extractor_feature.AprendizagemBayesiana;
 import application.extractor_feature.AprendizagemMLP;
 import application.extractor_feature.ExtractAudioFeature;
 import application.extractor_feature.ExtractFeature;
@@ -23,8 +19,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,14 +39,6 @@ public class PrincipalController {
     
 	private DecimalFormat df = new DecimalFormat("##0.0000");
 	private double[] caracteristicasSomSel = {0,0,0,0,0};
-
-	//	@FXML
-	//	public void classificar() {
-	//		//********Naive Bayes
-	//		double[] nb = AprendizagemBayesiana.naiveBayes(caracteristicasImgSel);
-	//		lbPctNedFlanders.setText("NED FLANDERS: "+df.format(nb[0]*100) + "%");
-	//		lbPctKrusty.setText("KRUSTY: "+df.format(nb[1]*100) + "%");
-	//	}
 
 	@FXML
 	public void classificar() {
@@ -113,7 +99,6 @@ public class PrincipalController {
 		
 		b.setRecordings(gravacoes);
 		b.setWindowSize(512);
-		b.setAttributes(attributes);
 	}
 
 	@FXML
@@ -148,13 +133,6 @@ public class PrincipalController {
 		return null;
 	}
 	
-	
-	
-
-	@FXML
-	public void mostraMatrizDecisao() throws Exception {
-		//lbMatrizColisao.setText(AprendizagemBayesiana.gerarMatrizConfusao());
-	}
 
 	public static void extrair() throws javax.sound.sampled.UnsupportedAudioFileException, java.io.IOException, com.jlibrosa.audio.wavFile.WavFileException, com.jlibrosa.audio.exception.FileFormatNotSupportedException {
 
