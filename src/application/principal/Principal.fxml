@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="488.0" prefWidth="1087.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.principal.PrincipalController">
+<BorderPane prefHeight="488.0" prefWidth="556.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.principal.PrincipalController">
    <top>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#extrairCaracteristicas" text="Criar ARFF com pasta selecionada">
+            <Button mnemonicParsing="false" onAction="#extrairCaracteristicas" text="Criar ARFF">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#selecionaAudio" prefHeight="25.0" prefWidth="133.0" text="abre Audio">
+            <Button layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#selecionaAudio" prefHeight="25.0" prefWidth="133.0" text="Abrir audio">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -30,20 +29,55 @@
    <center>
       <HBox prefHeight="312.0" prefWidth="607.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane hbarPolicy="ALWAYS" prefHeight="443.0" prefWidth="613.0" vbarPolicy="ALWAYS">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-               <content>
-                  <AnchorPane>
-                     <children>
-                        <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="-14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </ScrollPane>
-            <Accordion fx:id="accordionOpcoes" />
-            <VBox prefHeight="453.0" prefWidth="664.0" />
+            <VBox prefHeight="453.0" prefWidth="180.0">
+               <children>
+                  <Label text="Camadas Ocultas:">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="140.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label layoutX="10.0" layoutY="10.0" text="Learning Rate:">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField layoutX="10.0" layoutY="27.0" prefHeight="25.0" prefWidth="140.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label layoutX="10.0" layoutY="27.0" text="Learning Rate:">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField layoutX="10.0" layoutY="69.0" prefHeight="25.0" prefWidth="140.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button mnemonicParsing="false" onAction="#classificar" prefHeight="25.0" prefWidth="183.0" text="Rodar MLP">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="453.0" prefWidth="375.0">
+               <children>
+                  <Label text="Classe: ">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Label text="Label" />
          </children>
       </HBox>
    </center>

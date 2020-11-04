@@ -7,7 +7,6 @@ import application.extractor_feature.AprendizagemBayesiana;
 import application.extractor_feature.AprendizagemMLP;
 import application.extractor_feature.ExtractAudioFeature;
 import application.extractor_feature.ExtractFeature;
-import jAudioFeatureExtractor.jAudioTools.AudioSamples;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
