@@ -1,5 +1,5 @@
 @relation jAudio
-@ATTRIBUTE "Area Method of Moments of MFCCs Overall Average0" NUMERIC
+@ATTRIBUTE "Area Method of Moments of MFCCs Overall Average3" NUMERIC
 @ATTRIBUTE classe {Gato, Cachorro}
 
 @DATA

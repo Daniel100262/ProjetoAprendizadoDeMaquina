@@ -2,95 +2,84 @@ package application.extractor_feature;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import com.jlibrosa.audio.JLibrosa;
+import com.jlibrosa.audio.exception.FileFormatNotSupportedException;
+import com.jlibrosa.audio.wavFile.WavFile;
+import com.jlibrosa.audio.wavFile.WavFileException;
 
-import org.opencv.core.Mat;
-import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.paint.Color;
 
 public class ExtractFeature {
+	
+	public static double[] extraiCaracteristicas(File f) throws UnsupportedAudioFileException, IOException, WavFileException, FileFormatNotSupportedException{
+		
+		double[] caracteristicas = new double[2]; //Apenas magnitude(0) e classe(1)
+		float[][] magnitude;// = new float[0][0];
+		
+		float[] MagnitudeFeature = new float[0];
+		MagnitudeFeature = extraiMagnitudeFeature(f,magnitude);
 
-	
-	
-	public static double[] extraiCaracteristicas(File f) {
+		JLibrosa jLibrosa2 = new JLibrosa();
+		WavFile wavFile = WavFile.openWavFile(f);
+		int mSampleRate = (int) wavFile.getSampleRate();
+		float [][] melSpectrogramGerado = jLibrosa2.generateMelSpectroGram(MagnitudeFeature, mSampleRate, 2048, 128, 256);
 		
-		double[] caracteristicas = new double[6];
+		double MediaAreaMomentosMFCC = melSpectrogramGerado[0][0];
 		
-		double verdeCamisaNed = 0;
-		double narizKrusty = 0;
-		double cabeloKrusty = 0;
-		double bocaKrusty = 0;
-		double barbaNedFlanders = 0;
-		
-		
-		Image img = new Image(f.toURI().toString());
-		PixelReader pr = img.getPixelReader();
-		
-		Mat imagemOriginal = Imgcodecs.imread(f.getPath());
-        Mat imagemProcessada = imagemOriginal.clone();
-		
-		int w = (int)img.getWidth();
-		int h = (int)img.getHeight();
-		
-		
-		for(int i=0; i<h; i++) {
-			for(int j=0; j<w; j++) {
-				
-				Color cor = pr.getColor(j,i);
-				
-				double r = cor.getRed()*255; 
-				double g = cor.getGreen()*255;
-				double b = cor.getBlue()*255;
-				
-				if(isCamisaVerdeNedFlanders(r, g, b)) {
-					verdeCamisaNed++;
-					imagemProcessada.put(i, j, new double[]{0, 255, 128});
-				}
-				if(i < (h/2 + h/3) && i > (h/3) && isBarbaNedFlanders(r, g, b)) {
-					barbaNedFlanders++;
-					imagemProcessada.put(i, j, new double[]{0, 255, 255});
-				}
-				if(i < (h/2) && isNarizKrusty(r, g, b)) {
-					narizKrusty++;
-					imagemProcessada.put(i, j, new double[]{0, 255, 128});
-				}
-				if (i < (h/2) && isCabeloKrusty(r, g, b)) {
-					cabeloKrusty++;
-					imagemProcessada.put(i, j, new double[]{0, 255, 128});
-				}
-				if(i < (h/2 + h/3) && isBocaKrusty(r, g, b)) {
-					bocaKrusty++;
-					imagemProcessada.put(i, j, new double[]{0, 255, 255});
-				}
-				
-			}
-		}
-		
-		// Normaliza as características pelo número de pixels totais da imagem para %
-        verdeCamisaNed = (verdeCamisaNed / (w * h)) * 100;
-        narizKrusty = (narizKrusty / (w * h)) * 100;
-        cabeloKrusty = (cabeloKrusty / (w * h)) * 100;
-        bocaKrusty = (bocaKrusty / (w * h)) * 100;
-        barbaNedFlanders = (barbaNedFlanders / (w * h)) * 100;
-        
-        caracteristicas[0] = verdeCamisaNed;
-        caracteristicas[1] = barbaNedFlanders;
-        caracteristicas[2] = cabeloKrusty;
-        caracteristicas[3] = bocaKrusty;
-        caracteristicas[4] = narizKrusty;
+		caracteristicas[0] = MediaAreaMomentosMFCC;
         //APRENDIZADO SUPERVISIONADO - JÁ SABE QUAL A CLASSE NAS IMAGENS DE TREINAMENTO
-        caracteristicas[5] = f.getName().charAt(0)=='n'?0:1;
-		
-        HighGui.imshow("Imagem original", imagemOriginal);
-        HighGui.imshow("Imagem processada", imagemProcessada);
+        caracteristicas[1] = f.getName().charAt(0)=='G'?0:1; //GATO=0, CAO=1
         
-        HighGui.waitKey(0);
-        HighGui.destroyAllWindows();
+        System.out.println(caracteristicas);
 		
 		return caracteristicas;
+	}
+	
+	public static double extraiCarct (File f) throws IOException, WavFileException, FileFormatNotSupportedException {
+		double caracteristica1 = 0;
+		
+		WavFile wavfile = WavFile.openWavFile(f);
+		int sampleRate = (int)wavfile.getSampleRate();
+		int duration = (int)wavfile.getDuration();
+		
+		JLibrosa jLibrosa = new JLibrosa();
+		
+		float[] magnitude = jLibrosa.loadAndRead(f.getAbsolutePath(), sampleRate, duration);
+		wavfile.close();
+		float [][] melSpectogramGerado = jLibrosa.generateMelSpectroGram(magnitude, sampleRate, 2048, 128, 256);
+		System.out.println("Mel Spectrogram: "+melSpectogramGerado[0][0]);
+		caracteristica1 = melSpectogramGerado[0][0];
+		return caracteristica1;
+	}
+		
+	
+	public static float[] extraiMagnitudeFeature (File f,float[][] magnitude) throws IOException, WavFileException, FileFormatNotSupportedException {
+		
+		WavFile wavFile = WavFile.openWavFile(f);;
+		int mNumFrames = (int) (wavFile.getNumFrames());
+		int mChannels = wavFile.getNumChannels();
+		wavFile.close();
+		
+		DecimalFormat df = new DecimalFormat("#,#####");
+		df.setRoundingMode(RoundingMode.CEILING);
+		
+		// take the mean of amplitude values across all the channels and convert the
+		// signal to mono mode
+		
+		float[] melSpectrogram = new float[mNumFrames];
+				
+		for (int q = 0; q < mNumFrames; q++) {
+			double frameVal = 0;
+			for (int p = 0; p < mChannels; p++) {
+				frameVal = frameVal + magnitude[p][q];
+			}
+			melSpectrogram[q] = Float.parseFloat(df.format(frameVal / mChannels));
+		}
+
+		return melSpectrogram;
 	}
 	
 	public static boolean isCamisaVerdeNedFlanders(double r, double g, double b) {
@@ -150,7 +139,7 @@ public class ExtractFeature {
         int cont = -1;
         for (File imagem : arquivos) {
         	cont++;
-        	caracteristicas[cont] = extraiCaracteristicas(imagem);
+        	//caracteristicas[cont] = extraiCaracteristicas(imagem);
         	
         	String classe = caracteristicas[cont][5] == 0 ?"NedFlanders":"Krusty";
         	

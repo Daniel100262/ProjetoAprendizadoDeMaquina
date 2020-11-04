@@ -1,12 +1,19 @@
 package application.principal;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import com.jlibrosa.audio.exception.FileFormatNotSupportedException;
+import com.jlibrosa.audio.wavFile.WavFileException;
 
 import application.extractor_feature.AprendizagemBayesiana;
 import application.extractor_feature.AprendizagemMLP;
 import application.extractor_feature.ExtractAudioFeature;
-import application.extractor_feature.ExtractFeature;	
+import application.extractor_feature.ExtractFeature;
+import jAudioFeatureExtractor.ACE.DataTypes.Batch;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -26,6 +34,15 @@ public class PrincipalController {
 
 
 
+    @FXML private TextField txtCamadasOcultas;
+    @FXML private TextField txtLearningRate;
+    @FXML private TextField txtTempoTreinamento;
+    @FXML private TextField txtMomentum;
+
+    @FXML private Label pcCao;
+    @FXML private Label pcGato;
+    
+    
 	private DecimalFormat df = new DecimalFormat("##0.0000");
 	private double[] caracteristicasSomSel = {0,0,0,0,0};
 
@@ -39,11 +56,9 @@ public class PrincipalController {
 
 	@FXML
 	public void classificar() {
-		//********Naive Bayes
-		//double[] nb = AprendizagemMLP.multilayer(caracteristicasSomSel);
-		double[] nb = AprendizagemMLP.multilayerPerceptron(caracteristicasSomSel);
-		//		lbPctNedFlanders.setText("NED FLANDERS: "+df.format(nb[0]*100) + "%");
-		//		lbPctKrusty.setText("KRUSTY: "+df.format(nb[1]*100) + "%");
+		double[] mlp = AprendizagemMLP.multilayerPerceptron(caracteristicasSomSel);
+		pcCao.setText("Cão: "+df.format(mlp[0]*100) + "%");
+		pcGato.setText("Gato: "+df.format(mlp[1]*100) + "%");
 	}
 
 	@FXML
@@ -51,7 +66,7 @@ public class PrincipalController {
 		File cat = new File("C:\\Users\\Gustavo\\eclipse\\Workspace\\ProjetoAprendizadoDeMaquina\\src\\audio\\train\\cat\\cat_1.wav");
 		File dog = new File("C:\\Users\\Gustavo\\eclipse\\Workspace\\ProjetoAprendizadoDeMaquina\\src\\audio\\train\\dog\\dog_barking_0.wav");
 		double caract = ExtractAudioFeature.extraiCaracteristicas(dog);
-		System.out.println(AprendizagemMLP.multilayerPerceptron(caract));
+		//System.out.println(AprendizagemMLP.multilayerPerceptron(caract));
 //		extrair();
 	}
 
@@ -62,7 +77,7 @@ public class PrincipalController {
 			Parent root = loader.load();
 			stage.setScene(new Scene(root));
 			stage.setTitle("Histograma");
-			stage.initOwner(imageView.getScene().getWindow());
+			//stage.initOwner(imageView.getScene().getWindow());
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.setResizable(false);
 			stage.initStyle(StageStyle.UTILITY);
@@ -89,13 +104,31 @@ public class PrincipalController {
 			n.setStyle("-fx-bar-fill: red;");
 		}
 	}
+	
+	public void fazBatch() {
+		Batch b = new Batch();
+		
+		String aggNames[] = {"Standard Deviation", "Mean"};
+		b.setAggregators(aggNames, aggFeatures, aggParam);
+	}
 
 	@FXML
-	public void selecionaAudio() {
+	public void selecionaAudio() throws UnsupportedAudioFileException, IOException, WavFileException, FileFormatNotSupportedException {
 		File f = buscaAudio();
+		if(f != null) {
+			//caracteristicasSomSel = ExtractFeature.extraiCaracteristicas(f);
+			caracteristicasSomSel[0] = ExtractFeature.extraiCarct(f);
+			
+			System.out.println(caracteristicasSomSel[0]);
+			
+		}
 	}
 
 	private File buscaAudio() {
+		
+		
+		
+		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new 
 				FileChooser.ExtensionFilter("*.WAV","*.wav")); 	
@@ -110,10 +143,13 @@ public class PrincipalController {
 		}
 		return null;
 	}
+	
+	
+	
 
 	@FXML
 	public void mostraMatrizDecisao() throws Exception {
-		lbMatrizColisao.setText(AprendizagemBayesiana.gerarMatrizConfusao());
+		//lbMatrizColisao.setText(AprendizagemBayesiana.gerarMatrizConfusao());
 	}
 
 	public static void extrair() throws javax.sound.sampled.UnsupportedAudioFileException, java.io.IOException, com.jlibrosa.audio.wavFile.WavFileException, com.jlibrosa.audio.exception.FileFormatNotSupportedException {
