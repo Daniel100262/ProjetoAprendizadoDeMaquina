@@ -105,11 +105,15 @@ public class PrincipalController {
 		}
 	}
 	
-	public void fazBatch() {
+	public void fazBatch(File gravacao) throws Exception {
 		Batch b = new Batch();
 		
-		String aggNames[] = {"Standard Deviation", "Mean"};
-		b.setAggregators(aggNames, aggFeatures, aggParam);
+		File[] gravacoes = new File[1];
+		gravacoes[0] = gravacao;
+		
+		b.setRecordings(gravacoes);
+		b.setWindowSize(512);
+		b.setAttributes(attributes);
 	}
 
 	@FXML

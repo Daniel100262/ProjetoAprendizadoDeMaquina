@@ -20,7 +20,7 @@ public class ExtractFeature {
 		float[][] magnitude;// = new float[0][0];
 		
 		float[] MagnitudeFeature = new float[0];
-		MagnitudeFeature = extraiMagnitudeFeature(f,magnitude);
+		//MagnitudeFeature = extraiMagnitudeFeature(f,magnitude);
 
 		JLibrosa jLibrosa2 = new JLibrosa();
 		WavFile wavFile = WavFile.openWavFile(f);
@@ -82,79 +82,36 @@ public class ExtractFeature {
 		return melSpectrogram;
 	}
 	
-	public static boolean isCamisaVerdeNedFlanders(double r, double g, double b) {
-		 if (b >= 16 && b <= 42 &&  g >= 55 && g <= 104 &&  r >= 45 && r <= 70) {                       
-         	return true;
-         }
-		 return false;
-	}
-	public static boolean isNarizKrusty(double r, double g, double b) {
-		if (b >= 25 && b <= 39 &&  g >= 9 && g <= 50 &&  r >= 152 && r <= 215) {                       
-			return true;
-		}
-		return false;
-	}
-	public static boolean isCabeloKrusty(double r, double g, double b) {
-		if (b >= 107 && b <= 135 &&  g >= 125 && g <= 140 &&  r >= 0 && r <= 35) {                       
-			return true;
-		}
-		return false;
-	}
-	public static boolean isBocaKrusty(double r, double g, double b) {
-		if (b >= 70 && b <= 105 &&  g >= 103 && g <= 168 &&  r >= 180 && r <= 240) {                       
-			return true;
-		}
-		return false;
-	}
-	public static boolean isBarbaNedFlanders(double r, double g, double b) {
-		if (b >= 0 && b <= 39 &&  g >= 27 && g <= 97 &&  r >= 63 && r <= 131) {                       
-			return true;
-		}
-		return false;
-	}
+
 
 
 	public static void extrair() {
 				
 	    // Cabeçalho do arquivo Weka
 		String exportacao = "@relation caracteristicas\n\n";
-		exportacao += "@attribute camisa_ned_flanders real\n";
-		exportacao += "@attribute barba_ned_flanders real\n";
-		exportacao += "@attribute cabelo_krusty real\n";
-		exportacao += "@attribute boca_krusty real\n";
-		exportacao += "@attribute nariz_krusty real\n";
-		exportacao += "@attribute classe {NedFlanders, Krusty}\n\n";
+		exportacao += "@attribute Area Method of Moments of MFCCs Overall Average3 real\n";
+		exportacao += "@attribute classe {Gato, Cachorro}\n\n";
 		exportacao += "@data\n";
 		
 		
 	        
-	    // Diretório onde estão armazenadas as imagens
-	    File diretorio = new File("src\\application\\imagens");
+	    // Diretório onde estão armazenados os sons
+	    File diretorio = new File("src\\application\\test");
 	    File[] arquivos = diretorio.listFiles();
 	    
         // Definição do vetor de características
-        double[][] caracteristicas = new double[2600][6];
+        double[][] caracteristicas = new double[2600][2];
         
         // Percorre todas as imagens do diretório
         int cont = -1;
-        for (File imagem : arquivos) {
+        for (File wav : arquivos) {
         	cont++;
         	//caracteristicas[cont] = extraiCaracteristicas(imagem);
         	
-        	String classe = caracteristicas[cont][5] == 0 ?"NedFlanders":"Krusty";
+        	String classe = caracteristicas[cont][2] == 0 ?"Gato":"Cachorro";
         	
-        	System.out.println("Camisa Ned Flanders: " + caracteristicas[cont][0] 
-            		+ " - Barba Ned Flanders: " + caracteristicas[cont][1] 
-            		+ " - Cabelo Krusty: " + caracteristicas[cont][2] 
-            		+ " - Boca Krusty: " + caracteristicas[cont][3] 
-            		+ " - Nariz Krusty: " + caracteristicas[cont][4] 
-            		+ " - Classe: " + classe);
         	
         	exportacao += caracteristicas[cont][0] + "," 
-                    + caracteristicas[cont][1] + "," 
-        		    + caracteristicas[cont][2] + "," 
-                    + caracteristicas[cont][3] + "," 
-        		    + caracteristicas[cont][4] + "," 
                     + classe + "\n";
         }
         
